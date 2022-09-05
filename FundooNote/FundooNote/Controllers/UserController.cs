@@ -30,5 +30,32 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
+        [HttpPost("LoginUser")]
+        public IActionResult LoginUser(LoginModel loginModel)
+        {
+            try
+            {
+                string token = this.userBL.LoginUser(loginModel);
+                return this.Ok(new { success = true, status = 200, token = token, message = $"login successful for {loginModel.Email}" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost("ForgotPassword")]
+        public IActionResult ForgotPassword(string email)
+        {
+            try
+            {
+                bool isExist = this.userBL.ForgotPassword(email);
+                if (isExist) return Ok(new { success = true, message = $"Reset Link sent to Email : {email}" });
+                else return BadRequest(new { success = false, message = $"No user Exist with Email : {email}" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

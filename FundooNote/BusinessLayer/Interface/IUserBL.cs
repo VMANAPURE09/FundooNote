@@ -8,5 +8,7 @@ namespace BusinessLayer.Interface
     public interface IUserBL
     {
         void RegisterUser(UserPostModel userPostModel);
+        public string LoginUser(LoginModel loginModel);
+        public bool ForgotPassword(string emailid);
     }
 }
