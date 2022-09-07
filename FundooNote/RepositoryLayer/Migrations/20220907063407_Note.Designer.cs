@@ -10,7 +10,7 @@ using RepositoryLayer.Services;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(FundooContext))]
-    [Migration("20220906154000_Note")]
+    [Migration("20220907063407_Note")]
     partial class Note
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,9 @@ namespace RepositoryLayer.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("isArchieve")
                         .HasColumnType("bit");
 
@@ -58,12 +61,9 @@ namespace RepositoryLayer.Migrations
                     b.Property<bool>("isTrash")
                         .HasColumnType("bit");
 
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
                     b.HasKey("NoteId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Notes");
                 });
@@ -102,7 +102,7 @@ namespace RepositoryLayer.Migrations
                 {
                     b.HasOne("RepositoryLayer.Services.Entities.User", "user")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

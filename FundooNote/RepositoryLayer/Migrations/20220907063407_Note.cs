@@ -29,17 +29,17 @@ namespace RepositoryLayer.Migrations
                 {
                     table.PrimaryKey("PK_Notes", x => x.NoteId);
                     table.ForeignKey(
-                        name: "FK_Notes_Users_userId",
-                        column: x => x.userId,
+                        name: "FK_Notes_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notes_userId",
+                name: "IX_Notes_UserId",
                 table: "Notes",
-                column: "userId");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
