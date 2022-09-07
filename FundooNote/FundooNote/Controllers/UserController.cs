@@ -16,10 +16,11 @@ namespace FundooNote.Controllers
         IUserBL userBL;
         private IConfiguration _config;
         private FundooContext fundooContext;
-        public UserController(IUserBL userBL, IConfiguration config)
+        public UserController(IUserBL userBL, IConfiguration config, FundooContext fundooContext)
         {
             this.userBL = userBL;
             this._config = config;
+            this.fundooContext = fundooContext;
         }
         [HttpPost("RegisterUser")]
         public IActionResult RegisterUser(UserPostModel userPostModel)
