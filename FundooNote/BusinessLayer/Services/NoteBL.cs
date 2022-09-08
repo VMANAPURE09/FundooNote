@@ -43,7 +43,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return noteRL.GetAllNotes(userId);
+                return this.noteRL.GetAllNotes(userId);
             }
             catch (Exception ex)
             {
@@ -55,7 +55,7 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return noteRL.GetAllNotesUsingJoin(userId);
+                return this.noteRL.GetAllNotesUsingJoin(userId);
             }
             catch (Exception ex)
             {
