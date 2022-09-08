@@ -43,5 +43,28 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
+
+        [Authorize]
+        [HttpPut("UpdateNote/{NoteId}")]
+        public IActionResult UpdateNote(int NoteId, UpdateNoteModel updateNoteModel)
+        {
+            try
+            {
+                var note = fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefault();
+                //Authorization match userId
+                var userId = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userId.Value);
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Please provide correct note" });
+                }
+                this.noteBL.UpdateNote(UserID, NoteId, updateNoteModel);
+                return this.Ok(new { success = true, status = 200, message = "Note Updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

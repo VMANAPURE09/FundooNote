@@ -8,5 +8,6 @@ namespace RepositoryLayer.Interface
     public interface INoteRL
     {
         void AddNote(int userId, NoteModel noteModel);
+        public void UpdateNote(int userId, int NoteId, UpdateNoteModel updateNoteModel);
     }
 }
