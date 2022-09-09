@@ -107,8 +107,8 @@ namespace FundooNote.Controllers
                 {
                     return this.BadRequest(new { success = false, message = "Note not exist" });
                 }
-                Note notes = new Note();
-                 this.noteBL.GetNote(UserID, NoteId);
+                //Note notes = new Note();
+                 var notes = noteBL.GetNote(UserID, NoteId);
                 return this.Ok(new { success = true, status = 200, note = notes });
             }
             catch (Exception ex)
@@ -127,9 +127,9 @@ namespace FundooNote.Controllers
                 var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
                 int UserID = Int32.Parse(userid.Value);
 
-                List<Note> notes = new List<Note>();
-                this.noteBL.GetAllNotes(UserID);
-                return this.Ok(new { success = true, status = 200, Allnotes = notes });
+                //List<Note> notes = new List<Note>();
+                var note = noteBL.GetAllNotes(UserID);
+                return this.Ok(new { success = true, status = 200, Allnotes = note });
             }
             catch (Exception e)
             {
@@ -229,6 +229,7 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
+
         [Authorize]
         [HttpPut("ReminderNote/{NoteId}")]
         public async Task<IActionResult> ReminderNote(int NoteId, NoteRemainderModel  reminder)
@@ -246,6 +247,29 @@ namespace FundooNote.Controllers
                 var rem = Convert.ToDateTime(reminder.Reminder);
                 await this.noteBL.ReminderNote(UserID, NoteId, rem);
                 return this.Ok(new { success = true, status = 200, message = "Note  reminder added successfully" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("DeleteReminder/{NoteId}")]
+        public async Task<IActionResult> DeleteReminderNote(int NoteId)
+        {
+            try
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, status = 400, message = "Note doesn't exist" });
+                }
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+                await this.noteBL.DeleteReminder(UserID, NoteId);
+                return this.Ok(new { success = true, status = 200, message = "Reminder Deleted successfully" });
             }
             catch (Exception ex)
             {

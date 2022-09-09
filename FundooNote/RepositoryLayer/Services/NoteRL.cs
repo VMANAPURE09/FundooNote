@@ -84,6 +84,27 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public async Task<bool> DeleteReminder(int UserId, int NoteId)
+        {
+            try
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null || note.isTrash == true)
+                {
+                    return false;
+                }
+                note.isRemainder = false;
+                note.Remainder = DateTime.Now;
+
+                fundooContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<Note> GetAllNotes(int userId)
         {
             try
