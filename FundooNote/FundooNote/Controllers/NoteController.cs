@@ -205,7 +205,29 @@ namespace FundooNote.Controllers
             {
                 throw ex;
             }
+        }
+        [Authorize]
+        [HttpPut("TrashNote/{NoteId}")]
+        public async Task<IActionResult> TrashNote(int NoteId)
+        {
+            try
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, status = 400, message = "Note doesn't exist" });
+                }
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
 
+                bool trash = await this.noteBL.TrashNote(UserID, NoteId);
+                return this.Ok(new { success = true, status = 200, message = "Note Trashed Successfully" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
     }

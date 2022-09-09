@@ -18,6 +18,7 @@ namespace BusinessLayer.Interface
 
         Task<bool> ArchieveNote(int userId, int NoteId);
         Task<bool> PinNote(int userId, int NoteId);
+        Task<bool> TrashNote(int userId, int NoteId);
 
 
     }

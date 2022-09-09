@@ -165,6 +165,28 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public async Task<bool> TrashNote(int userId, int NoteId)
+        {
+            try
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null)
+                {
+                    return false;
+                }
+                if (note.isTrash == true)
+                {
+                    note.isTrash = false;
+                }
+                else { note.isTrash = true; }
+                await fundooContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public void UpdateNote(int userId, int NoteId, UpdateNoteModel updateNoteModel)
         {

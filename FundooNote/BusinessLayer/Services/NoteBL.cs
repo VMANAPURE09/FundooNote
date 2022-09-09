@@ -104,6 +104,18 @@ namespace BusinessLayer.Services
             }
         }
 
+        public async Task<bool> TrashNote(int userId, int NoteId)
+        {
+            try
+            {
+                return await noteRL.TrashNote(userId, NoteId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void UpdateNote(int userId, int NoteId, UpdateNoteModel updateNoteModel)
         {
             try
