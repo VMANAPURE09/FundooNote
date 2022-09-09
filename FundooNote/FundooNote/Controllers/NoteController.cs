@@ -182,6 +182,32 @@ namespace FundooNote.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPut("PinNote/{NoteId}")]
+        public async Task<IActionResult> PinNote(int NoteId)
+        {
+            try
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, status = 400, message = "Note doesn't exist" });
+                }
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+
+
+                var pin = await this.noteBL.PinNote(UserID, NoteId);
+                return this.Ok(new { success = true, status = 200, message = "Note Pinned successfully" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
     }
 }
 

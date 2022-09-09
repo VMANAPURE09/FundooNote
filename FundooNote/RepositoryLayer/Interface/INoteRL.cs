@@ -17,5 +17,6 @@ namespace RepositoryLayer.Interface
         public List<NoteResponseModel> GetAllNotesUsingJoin(int UserId);
 
         Task<bool> ArchieveNote(int userId, int NoteId);
+        Task<bool> PinNote(int userId, int NoteId);
     }
 }
