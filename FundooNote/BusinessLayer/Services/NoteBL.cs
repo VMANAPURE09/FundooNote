@@ -33,12 +33,14 @@ namespace BusinessLayer.Services
             try
             {
                 return await this.noteRL.ArchieveNote(userId, NoteId);
+
             }
-            catch (Exception ex)
+            catch ( Exception ex)
             {
                 throw ex;
             }
         }
+
 
         public bool DeleteNote(int userId, int NoteId)
         {

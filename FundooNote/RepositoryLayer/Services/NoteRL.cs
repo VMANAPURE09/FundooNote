@@ -45,7 +45,6 @@ namespace RepositoryLayer.Services
         {
             try
             {
-
                 var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
                 if (note == null || note.isTrash == true)
                 {
@@ -163,6 +162,5 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
-
     }
 }
