@@ -230,6 +230,24 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public async Task UpdateColor(int userId, int NoteId, string Color)
+        {
+            try
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note != null || note.isTrash != true)
+                {
+                    note.Color = Color;
+                }
+                fundooContext.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void UpdateNote(int userId, int NoteId, UpdateNoteModel updateNoteModel)
         {
             try

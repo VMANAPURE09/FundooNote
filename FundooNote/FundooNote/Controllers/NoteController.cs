@@ -276,6 +276,28 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
+        [Authorize]
+        [HttpPut("UpdateColor/{NoteId}/{color}")]
+        public async Task<IActionResult> UpdateColor(int NoteId, string color)
+        {
+            try
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, status = 400, message = "Note doesn't exist" });
+                }
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+                await this.noteBL.UpdateColor(UserID, NoteId, color);
+                return this.Ok(new { success = true, status = 200, message = "Color updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }
