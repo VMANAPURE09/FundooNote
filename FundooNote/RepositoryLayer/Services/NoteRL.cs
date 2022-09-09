@@ -1,4 +1,5 @@
 ﻿using CommonLayer.User;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services.Entities;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Note = RepositoryLayer.Services.Entities.Note;
 
 namespace RepositoryLayer.Services
@@ -32,6 +34,31 @@ namespace RepositoryLayer.Services
                   
                 fundooContext.Notes.Add(note);
                 fundooContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> ArchieveNote(int userId, int NoteId)
+        {
+            try
+            {
+
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null || note.isTrash == true)
+                {
+                    return false;
+                }
+
+                if (note.isArchieve == true)
+                {
+                    note.isArchieve = false;
+                }
+                note.isArchieve = true;
+                await fundooContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
