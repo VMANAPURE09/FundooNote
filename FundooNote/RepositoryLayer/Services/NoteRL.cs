@@ -165,6 +165,27 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public async Task<bool> ReminderNote(int userId, int NoteId, DateTime reminder)
+        {
+            try 
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null || note.isTrash == true)
+                {
+                    return false;
+                }
+                note.isRemainder = true;
+                note.Remainder = reminder;
+
+                fundooContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<bool> TrashNote(int userId, int NoteId)
         {
             try

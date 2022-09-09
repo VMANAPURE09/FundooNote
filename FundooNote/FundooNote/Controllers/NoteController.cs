@@ -229,6 +229,29 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
+        [Authorize]
+        [HttpPut("ReminderNote/{NoteId}")]
+        public async Task<IActionResult> ReminderNote(int NoteId, NoteRemainderModel  reminder)
+        {
+            try
+            {
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, status = 400, message = "Note doesn't exist" });
+                }
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+                var rem = Convert.ToDateTime(reminder.Reminder);
+                await this.noteBL.ReminderNote(UserID, NoteId, rem);
+                return this.Ok(new { success = true, status = 200, message = "Note  reminder added successfully" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }
