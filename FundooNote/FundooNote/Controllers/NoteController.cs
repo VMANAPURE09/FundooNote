@@ -298,7 +298,26 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
+        [Authorize]
+        [HttpGet("GetAllColor")]
+        public IActionResult GetAllColor()
+        {
+            try
+            {
 
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+
+                List<GetColor> note = new List<GetColor>();
+                note = this.noteBL.GetAllColor(UserID);
+                return this.Ok(new { success = true, status = 200, noteList = note });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

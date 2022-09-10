@@ -66,6 +66,18 @@ namespace BusinessLayer.Services
             }
         }
 
+        public List<GetColor> GetAllColor(int userId)
+        {
+            try
+            {
+                return noteRL.GetAllColor(userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<Note> GetAllNotes(int userId)
         {
             try

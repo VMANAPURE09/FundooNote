@@ -105,6 +105,25 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public List<GetColor> GetAllColor(int userId)
+        {
+            try
+            {
+                return fundooContext.Users.Where(u => u.UserId == userId)
+                .Join(fundooContext.Notes,
+                u => u.UserId,
+                n => n.UserId,
+                (u, n) => new GetColor
+                {
+                    Color = n.Color
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<Note> GetAllNotes(int userId)
         {
             try
