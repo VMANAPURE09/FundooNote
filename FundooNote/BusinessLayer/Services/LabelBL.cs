@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using CommonLayer.User;
 
 namespace BusinessLayer.Services
 {
@@ -22,6 +23,42 @@ namespace BusinessLayer.Services
             try
             {
                 await this.labelRL.AddLabel(UserId, NoteId, labelName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<Label> GetLabelByNoteId(int userId, int NoteId)
+        {
+            try
+            {
+                return await this.labelRL.GetLabelByNoteId(userId, NoteId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<GetLabelModel>> GetLabelByNoteIdwithJoin(int userId, int NoteId)
+        {
+            try
+            {
+                return await this.labelRL.GetLabelByNoteIdwithJoin(userId, NoteId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<GetLabelModel>> GetLabelByUserIdWithJoin(int UserId)
+        {
+            try
+            {
+                return await this.labelRL.GetLabelByUserIdWithJoin(UserId);
             }
             catch (Exception ex)
             {

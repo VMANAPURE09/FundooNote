@@ -39,5 +39,48 @@ namespace FundooNote.Controllers
             await this.labelBL.AddLabel(UserID, NoteId, labelName);
             return this.Ok(new { success = true, status = 200, message = "Label added successfully" });
         }
+        [Authorize]
+        [HttpGet("GetLabels/{NoteId}")]
+        public async Task<IActionResult> GetLabels(int NoteId)
+        {
+            var labelNote = fundooContext.Labels.Where(x => x.NoteId == NoteId).FirstOrDefault();
+            if (labelNote == null)
+            {
+                return this.BadRequest(new { success = false, status = 400, message = "Note doesn't exist" });
+            }
+            var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+            int UserID = Int32.Parse(userid.Value);
+
+
+            var labels = await this.labelBL.GetLabelByNoteId(UserID, NoteId);
+            return this.Ok(new { success = true, status = 200, Labels = labels });
+        }
+        [Authorize]
+        [HttpGet("GetLabelByNoteIdwithJoin/{NoteId}")]
+        public async Task<IActionResult> GetLabelByNoteIdwithJoin(int NoteId)
+        {
+            var labelNote = fundooContext.Labels.Where(x => x.NoteId == NoteId).FirstOrDefault();
+            if (labelNote == null)
+            {
+                return this.BadRequest(new { success = false, status = 400, message = "Note doesn't exist " });
+            }
+            var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+            int UserID = Int32.Parse(userid.Value);
+
+
+            var labels = await this.labelBL.GetLabelByNoteIdwithJoin(UserID, NoteId);
+            return this.Ok(new { success = true, status = 200, Labels = labels });
+        }
+        [Authorize]
+        [HttpGet("GetLabelByUserIdWithJoin")]
+        public async Task<IActionResult> GetLabelByUserIdWithJoin()
+        {
+            var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+            int UserID = Int32.Parse(userid.Value);
+
+
+            var labels = await this.labelBL.GetLabelByUserIdWithJoin(UserID);
+            return this.Ok(new { success = true, status = 200, Labels = labels });
+        }
     }
 }
