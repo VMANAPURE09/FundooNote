@@ -14,5 +14,6 @@ namespace RepositoryLayer.Interface
         Task<List<GetLabelModel>> GetLabelByNoteIdwithJoin(int userId, int NoteId);
         Task<List<GetLabelModel>> GetLabelByUserIdWithJoin(int UserId);
         Task UpdateLabel(int UserId, int NoteId, string newLabel);
+        Task<bool> DeleteLabel(int UserId, int NoteId);
     }
 }

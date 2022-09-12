@@ -99,5 +99,21 @@ namespace FundooNote.Controllers
             await this.labelBL.UpdateLabel(UserID, NoteId, newLabel);
             return this.Ok(new { success = true, status = 200, message = "Label Updated successfully" });
         }
+
+        [Authorize]
+        [HttpDelete("DeleteLabel/{NoteId}")]
+        public async Task<IActionResult> DeleteLabel(int NoteId)
+        {
+            var labelNote = await fundooContext.Labels.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+            if (labelNote == null)
+            {
+                return this.BadRequest(new { success = false, status = 400, message = "There is no Label created for this NoteId " });
+            }
+            var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+            int UserID = Int32.Parse(userid.Value);
+
+            await this.labelBL.DeleteLabel(UserID, NoteId);
+            return this.Ok(new { success = true, status = 200, message = "Label Deleted successfully" });
+        }
     }
 }
