@@ -3,6 +3,8 @@ using CommonLayer.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Migrations;
 using RepositoryLayer.Services;
@@ -22,11 +24,15 @@ namespace FundooNote.Controllers
 
         private IConfiguration _config;
         private FundooContext fundooContext;
-        public NoteController(INoteBL noteBL, IConfiguration config, FundooContext fundooContext)
+        private readonly IDistributedCache _cache;
+        private readonly IMemoryCache _memoryCache;
+        public NoteController(INoteBL noteBL, IConfiguration config, FundooContext fundooContext, IDistributedCache cache, IMemoryCache memoryCache)
         {
             this.noteBL = noteBL;
             this._config = config;
             this.fundooContext = fundooContext;
+            this._cache = cache;
+            this._memoryCache = memoryCache;
 
         }
         [Authorize]

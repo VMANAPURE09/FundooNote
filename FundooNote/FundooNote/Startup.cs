@@ -36,6 +36,7 @@ namespace FundooNote
 
         {
             services.AddControllers();
+            services.AddMemoryCache();
             services.AddDbContext<FundooContext>(options =>
           options.UseSqlServer(Configuration.GetConnectionString("NoteFundoo")));
 
@@ -103,6 +104,13 @@ namespace FundooNote
             services.AddTransient<INoteBL, NoteBL>();
             services.AddTransient<ILabelBL, LabelBL>();
             services.AddTransient<ILabelRL, LabelRL>();
+
+            services.AddDistributedRedisCache(
+              options =>
+              {
+                  options.Configuration = "Localhost:44362";
+              }
+              );
 
         }
 
