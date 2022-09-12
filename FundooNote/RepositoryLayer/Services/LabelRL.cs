@@ -124,5 +124,23 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
+
+        public async Task UpdateLabel(int UserId, int NoteId, string newLabel)
+        {
+            try
+            {
+
+                var label = await this.fundooContext.Labels.Where(x => x.NoteId == NoteId && x.UserId == UserId).FirstOrDefaultAsync();
+                if (label != null)
+                {
+                    label.LabelName = newLabel;
+                }
+                await fundooContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            };
+        }
     }
 }
