@@ -108,7 +108,7 @@ namespace FundooNote
             services.AddDistributedRedisCache(
               options =>
               {
-                  options.Configuration = "Localhost:44362";
+                  options.Configuration = "Localhost:6379";
               }
               );
 

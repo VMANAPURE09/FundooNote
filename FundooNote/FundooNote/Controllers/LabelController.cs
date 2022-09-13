@@ -27,7 +27,7 @@ namespace FundooNote.Controllers
         }
         [Authorize]
         [HttpPost("AddLabel/{NoteId}/{labelName}")]
-        public async Task<IActionResult> AddLabel(int NoteId, string labelName)
+        public async Task<IActionResult>AddLabel(int NoteId, string labelName)
         {
             var labelNote = fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefault();
             if (labelNote == null)

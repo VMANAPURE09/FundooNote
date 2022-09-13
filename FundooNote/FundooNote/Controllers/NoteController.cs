@@ -6,11 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using RepositoryLayer.Migrations;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FundooNote.Controllers
@@ -29,7 +31,7 @@ namespace FundooNote.Controllers
         public NoteController(INoteBL noteBL, IConfiguration config, FundooContext fundooContext, IDistributedCache cache, IMemoryCache memoryCache)
         {
             this.noteBL = noteBL;
-            this._config = config;
+            this._config =config;
             this.fundooContext = fundooContext;
             this._cache = cache;
             this._memoryCache = memoryCache;
@@ -318,6 +320,41 @@ namespace FundooNote.Controllers
                 List<GetColor> note = new List<GetColor>();
                 note = this.noteBL.GetAllColor(UserID);
                 return this.Ok(new { success = true, status = 200, noteList = note });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [Authorize]
+        [HttpGet("GetAllNoteByJoinUsingRedis")]
+        public IActionResult GetAllNoteByUsingRedis()
+        {
+            try
+            {
+                string CacheKey = "NoteList";
+                string serializeNoteList;
+                var NoteList = new List<NoteResponseModel>();
+                var RedisNoteList = _cache.Get(CacheKey);
+
+                if (RedisNoteList != null)
+                {
+                    serializeNoteList = Encoding.UTF8.GetString(RedisNoteList);
+                    NoteList = JsonConvert.DeserializeObject<List<NoteResponseModel>>(serializeNoteList);
+                }
+                else
+                {
+                    var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                    int UserID = Int32.Parse(userid.Value);
+                    NoteList = this.noteBL.GetAllNotesByUsingJoin(UserID);
+                    serializeNoteList = JsonConvert.SerializeObject(NoteList);
+                    RedisNoteList = Encoding.UTF8.GetBytes(serializeNoteList);
+                    var option = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(20)).SetAbsoluteExpiration(TimeSpan.FromHours(6));
+                    _cache.Set(CacheKey, RedisNoteList, option);
+
+                }
+                return this.Ok(new { success = true, status = 200, noteList = NoteList });
             }
             catch (Exception ex)
             {
