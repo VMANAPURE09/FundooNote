@@ -14,6 +14,7 @@ namespace RepositoryLayer.Services
         public DbSet<User> Users { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Label> Labels { get; set; }
+        public DbSet<Collaborator> Collaborators { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
