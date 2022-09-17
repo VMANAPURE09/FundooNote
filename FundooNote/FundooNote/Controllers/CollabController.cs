@@ -37,7 +37,7 @@ namespace FundooNote.Controllers
                 var collab = fundooContext.Collaborators.FirstOrDefault(c => c.UserId == Userid && c.NoteId == NoteId);
                 if (collab != null)
                 {
-                    return Ok(new { success = false, Message = "Try With Some Other NoteId" });
+                    return BadRequest(new { success = false, Message = "Try With Some Other NoteId" });
                 }
                 await this.collabBL.AddCollab(Userid, NoteId, collabValidation.CollabEmail);
                 return Ok(new { success = true, Message = "Collaborator Added Successfully" });
@@ -61,7 +61,7 @@ namespace FundooNote.Controllers
                 var collab = fundooContext.Collaborators.FirstOrDefault(c => c.UserId == Userid);
                 if (collab == null)
                 {
-                    return Ok(new { success = false, Message = "Collaborator not Exists" });
+                    return BadRequest(new { success = false, Message = "Collaborator not Exists" });
 
                 }
                 List<Collaborator> collabList = new List<Collaborator>();
@@ -86,7 +86,7 @@ namespace FundooNote.Controllers
                 var collab = fundooContext.Collaborators.FirstOrDefault(c => c.UserId == UserId && c.NoteId == Noteid);
                 if (collab == null)
                 {
-                    Ok(new { success = false, Message = "Collaborator Doesn't Exists" });
+                    BadRequest(new { success = false, Message = "Collaborator Doesn't Exists" });
 
                 }
                 await this.collabBL.DeleteCollab(UserId, Noteid);
